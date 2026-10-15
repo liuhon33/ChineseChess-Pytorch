@@ -16,3 +16,5 @@ scripts/logs/
 validation_perf_*/
 validation_sync_*/
 validation_*stack_*.txt
+
+*.py text eol=lf
