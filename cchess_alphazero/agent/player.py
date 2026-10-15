@@ -112,13 +112,15 @@ class CChessPlayer:
         limit = 256                 # max prediction queue size
         while not self.job_done:
             self.run_lock.acquire()
+            t_data = None
             with self.q_lock:
                 l = min(limit, len(self.buffer_history))
                 if l > 0:
                     t_data = self.buffer_planes[0:l]
-                    # logger.debug(f"send queue size = {l}")
-                    self.pipe.send(t_data)
-            if l == 0:
+            if t_data is not None:
+                # logger.debug(f"send queue size = {l}")
+                self.pipe.send(t_data)
+            else:
                 self.run_lock.release()
                 # Producers need q_lock to enqueue work. Sleeping with it held
                 # can starve every search thread on Linux for minutes.
